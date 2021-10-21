@@ -3,11 +3,17 @@ package com.challengeWarmUp.challenge.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.challengeWarmUp.challenge.daoImp.Post;
 
@@ -46,4 +52,23 @@ public class PostController {
 		
 		return ResponseEntity.ok(post);
 	}
+	
+	@RequestMapping(path = "/posts", method=RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public @ResponseBody ResponseEntity<?> create(@RequestPart(value="post") com.challengeWarmUp.challenge.models.Post post, @RequestPart(value="image", required=false) MultipartFile image){
+		
+		if(post == null || post.getTitle() == null || post.getTitle().isEmpty()) 
+			return ResponseEntity.badRequest().body("Field title cannot be null or empty");
+		
+		String imageName = null;
+		if(image != null) {
+			imageName = image.getOriginalFilename();
+			
+			if(!imageName.contains(".png") && !imageName.contains(".jpg") && !imageName.contains(".jpeg"))
+				return ResponseEntity.badRequest().body("Unsupported image extension");
+		}
+		
+		post.setImage(imageName);
+		return ResponseEntity.ok(this.post.create(post));
+	}
+	
 }

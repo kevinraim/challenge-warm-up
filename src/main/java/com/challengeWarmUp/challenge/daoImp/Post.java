@@ -66,5 +66,10 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 			return null;
 		}
 	}
+
+	@Override
+	public com.challengeWarmUp.challenge.models.Post create(com.challengeWarmUp.challenge.models.Post Post) {
+		return em.merge(Post);
+	}
 	
 }

@@ -17,4 +17,5 @@ public interface PostDao{
 	
 	Post getById(Long id);
 	
+	com.challengeWarmUp.challenge.models.Post create(com.challengeWarmUp.challenge.models.Post Post);
 }
