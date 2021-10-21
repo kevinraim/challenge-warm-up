@@ -42,4 +42,9 @@ public class User implements UserDao{
 		}
 	}
 
+	@Override
+	public com.challengeWarmUp.challenge.models.User findById(Long id) {
+		return em.find(com.challengeWarmUp.challenge.models.User.class, id);
+	}
+
 }
