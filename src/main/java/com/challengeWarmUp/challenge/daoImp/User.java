@@ -2,6 +2,7 @@ package com.challengeWarmUp.challenge.daoImp;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +31,15 @@ public class User implements UserDao{
 	
 	@Override
 	public com.challengeWarmUp.challenge.models.User findByEmail(String email) {
-		return em.createQuery("From User WHERE email="+ "'" + email + "'", com.challengeWarmUp.challenge.models.User.class).getSingleResult();
+		TypedQuery<com.challengeWarmUp.challenge.models.User> q = em.createQuery("From User WHERE email="+ "'" + email + "'", com.challengeWarmUp.challenge.models.User.class);
+		
+		try {
+			return q.getSingleResult();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
