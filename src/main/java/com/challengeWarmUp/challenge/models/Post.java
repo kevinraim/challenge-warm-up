@@ -11,8 +11,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name="post", schema="public")
+@Where(clause = "deleted = false")
 public class Post {
 	
 	@Id
@@ -38,7 +41,10 @@ public class Post {
 	
 	@Column(name="id_user")
 	private Long idUser;
-
+	
+	@Column(name="deleted")
+	private Boolean deleted;
+	
 	public Post() {}
 	
 	public Post(Long id, String title, String content, String image, String category, Calendar date, Long idUser) {
@@ -49,6 +55,7 @@ public class Post {
 		this.category = category;
 		this.date = date;
 		this.idUser = idUser;
+		this.deleted = false;
 	}
 
 	public Long getId() {
@@ -107,5 +114,11 @@ public class Post {
 		this.idUser = idUser;
 	}
 	
+	public Boolean getDeleted() {
+		return this.deleted;
+	}
 	
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 }

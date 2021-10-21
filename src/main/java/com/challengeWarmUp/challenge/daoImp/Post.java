@@ -79,7 +79,8 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 		if(postToRemove == null)
 			return false;
 		
-		em.remove(postToRemove);
+		postToRemove.setDeleted(true);
+		em.merge(postToRemove);
 		return true;
 	}
 
