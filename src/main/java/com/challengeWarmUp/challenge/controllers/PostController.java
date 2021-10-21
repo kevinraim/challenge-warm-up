@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.challengeWarmUp.challenge.daoImp.PostDaoImp;
-import com.challengeWarmUp.challenge.projections.PostProjection;
+import com.challengeWarmUp.challenge.models.Post;
 
 @RestController
 public class PostController {
@@ -16,7 +16,7 @@ public class PostController {
 	private PostDaoImp postImp;
 	
 	@GetMapping(value="/posts")
-	public List<PostProjection> getAllOrderByDate(){
+	public List<?> getAllOrderByDate(){
 		return postImp.getOrderByDate();
 	}
 }
