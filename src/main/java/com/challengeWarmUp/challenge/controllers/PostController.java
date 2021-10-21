@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +27,13 @@ public class PostController {
 	
 	@Autowired
 	private Post post;
+	@Autowired
+	private com.challengeWarmUp.challenge.daoImp.User user;
+	
+	private Long getSessionUserId() {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return this.user.findByEmail(user.getUsername()).getId();
+	}
 	
 	@GetMapping(value="/posts")
 	public List<com.challengeWarmUp.challenge.dto.Post> getAllOrderByDate(){
@@ -71,6 +80,7 @@ public class PostController {
 		}
 		
 		post.setImage(imageName);
+		post.setIdUser(getSessionUserId());
 		return ResponseEntity.ok(this.post.create(post));
 	}
 	
@@ -84,6 +94,9 @@ public class PostController {
 	
 	@PatchMapping(value="/posts/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public @ResponseBody ResponseEntity<?> update(@PathVariable Long id, @RequestPart(value="post") com.challengeWarmUp.challenge.models.Post post, @RequestPart(value="image", required=false) MultipartFile image){
+		
+		if(user.findById(post.getIdUser()) == null)
+			return ResponseEntity.badRequest().body("Id User not found");
 		
 		String imageName = null;
 		if(image != null) {
