@@ -15,6 +15,6 @@ public interface PostDao{
 	
 	List<Post> getByTitleAndCategory(String title, String category);
 	
-	List<Post> getById(Long id);
+	Post getById(Long id);
 	
 }

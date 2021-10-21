@@ -1,9 +1,9 @@
 package com.challengeWarmUp.challenge.controllers;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +38,12 @@ public class PostController {
 	}
 	
 	@GetMapping(value="/posts/{id}")
-	public List<com.challengeWarmUp.challenge.dto.Post> getById(@PathVariable Long id){
-		return post.getById(id);
+	public ResponseEntity<?> getById(@PathVariable Long id){
+		com.challengeWarmUp.challenge.dto.Post post = this.post.getById(id);
+
+		if(post == null)
+			return ResponseEntity.badRequest().body("id not found");
+		
+		return ResponseEntity.ok(post);
 	}
 }

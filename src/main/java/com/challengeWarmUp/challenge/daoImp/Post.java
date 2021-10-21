@@ -3,6 +3,7 @@ package com.challengeWarmUp.challenge.daoImp;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -52,12 +53,18 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 	}
 	
 	@Override
-	public List<com.challengeWarmUp.challenge.dto.Post> getById(Long id) {
+	public com.challengeWarmUp.challenge.dto.Post getById(Long id) {
 		TypedQuery<com.challengeWarmUp.challenge.dto.Post> q = em.createQuery("Select new com.challengeWarmUp.challenge.dto.Post(p.id, p.title, p.image, p.category, p.date)" + 
 				" From Post p" +
 				" Where id=" + id, com.challengeWarmUp.challenge.dto.Post.class);
-		return q.getResultList();
+		
+		try {
+			return q.getSingleResult();
+		}
+		catch(NoResultException e) {
+			e.printStackTrace(); //It's this ok?
+			return null;
+		}
 	}
-
 	
 }
