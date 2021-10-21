@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.challengeWarmUp.challenge.daoImp.Post;
+import com.challengeWarmUp.challenge.validations.Image;
 
 @RestController
 public class PostController {
@@ -64,7 +66,7 @@ public class PostController {
 		if(image != null) {
 			imageName = image.getOriginalFilename();
 			
-			if(!imageName.contains(".png") && !imageName.contains(".jpg") && !imageName.contains(".jpeg"))
+			if(Image.imageExtension(imageName) == false)
 				return ResponseEntity.badRequest().body("Unsupported image extension");
 		}
 		
@@ -78,6 +80,21 @@ public class PostController {
 			return ResponseEntity.badRequest().body("Post with id "+ id +" not found");
 		
 		return ResponseEntity.ok("Post with id "+ id + " removed");
+	}
+	
+	@PatchMapping(value="/posts/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public @ResponseBody ResponseEntity<?> update(@PathVariable Long id, @RequestPart(value="post") com.challengeWarmUp.challenge.models.Post post, @RequestPart(value="image", required=false) MultipartFile image){
+		
+		String imageName = null;
+		if(image != null) {
+			imageName = image.getOriginalFilename();
+			
+			if(Image.imageExtension(imageName) == false)
+				return ResponseEntity.badRequest().body("Unsupported image extension");
+		}
+		
+		post.setImage(imageName);
+		return this.post.update(id, post) == true ? ResponseEntity.ok("Post has been updated") : ResponseEntity.badRequest().body("Post with id "+ id +" not found");
 	}
 	
 }

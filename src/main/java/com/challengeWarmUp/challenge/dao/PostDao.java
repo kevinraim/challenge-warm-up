@@ -20,4 +20,6 @@ public interface PostDao{
 	com.challengeWarmUp.challenge.models.Post create(com.challengeWarmUp.challenge.models.Post Post);
 	
 	boolean remove(Long id);
+	
+	boolean update(Long id, com.challengeWarmUp.challenge.models.Post post);
 }
