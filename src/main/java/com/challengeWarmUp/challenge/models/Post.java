@@ -39,6 +39,8 @@ public class Post {
 	@Column(name="id_user")
 	private Long idUser;
 
+	public Post() {}
+	
 	public Post(Long id, String title, String content, String image, String category, Calendar date, Long idUser) {
 		this.id = id;
 		this.title = title;
