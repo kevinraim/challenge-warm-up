@@ -71,5 +71,16 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 	public com.challengeWarmUp.challenge.models.Post create(com.challengeWarmUp.challenge.models.Post Post) {
 		return em.merge(Post);
 	}
+
+	@Override
+	public boolean remove(Long id) {
+		com.challengeWarmUp.challenge.models.Post postToRemove = em.find(com.challengeWarmUp.challenge.models.Post.class, id);
+		
+		if(postToRemove == null)
+			return false;
+		
+		em.remove(postToRemove);
+		return true;
+	}
 	
 }

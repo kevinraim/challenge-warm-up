@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +70,14 @@ public class PostController {
 		
 		post.setImage(imageName);
 		return ResponseEntity.ok(this.post.create(post));
+	}
+	
+	@DeleteMapping(value="/posts/{id}")
+	public ResponseEntity<?> remove(@PathVariable Long id){
+		if(post.remove(id) == false)
+			return ResponseEntity.badRequest().body("Post with id "+ id +" not found");
+		
+		return ResponseEntity.ok("Post with id "+ id + " removed");
 	}
 	
 }
