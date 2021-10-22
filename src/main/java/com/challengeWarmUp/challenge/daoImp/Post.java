@@ -38,7 +38,7 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 	public List<com.challengeWarmUp.challenge.dto.Post> getByCategory(String category) {
 		TypedQuery<com.challengeWarmUp.challenge.dto.Post> q = em.createQuery("Select new com.challengeWarmUp.challenge.dto.Post(p.id, p.title, p.image, p.category, p.date)" + 
 				" From Post p" +
-				" Where category=" + "'" + category + "'" +
+				" Where category_id=" + "'" + category + "'" +
 				" ORDER BY date DESC", com.challengeWarmUp.challenge.dto.Post.class);
 		return q.getResultList();
 	}
@@ -47,7 +47,7 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 	public List<com.challengeWarmUp.challenge.dto.Post> getByTitleAndCategory(String title, String category) {
 		TypedQuery<com.challengeWarmUp.challenge.dto.Post> q = em.createQuery("Select new com.challengeWarmUp.challenge.dto.Post(p.id, p.title, p.image, p.category, p.date)" + 
 				" From Post p" +
-				" Where category=" + "'" + category + "'" + " and title="+ "'" + title + "'" +
+				" Where category_id=" + "'" + category + "'" + " and title="+ "'" + title + "'" +
 				" ORDER BY date DESC", com.challengeWarmUp.challenge.dto.Post.class);
 		return q.getResultList();
 	}
@@ -56,7 +56,7 @@ public class Post implements com.challengeWarmUp.challenge.dao.PostDao{
 	public com.challengeWarmUp.challenge.dto.Post getById(Long id) {
 		TypedQuery<com.challengeWarmUp.challenge.dto.Post> q = em.createQuery("Select new com.challengeWarmUp.challenge.dto.Post(p.id, p.title, p.image, p.category, p.date)" + 
 				" From Post p" +
-				" Where id=" + id, com.challengeWarmUp.challenge.dto.Post.class);
+				" Where p.id=" + id, com.challengeWarmUp.challenge.dto.Post.class);
 		
 		try {
 			return q.getSingleResult();

@@ -32,6 +32,10 @@ public class PostController {
 	
 	private Long getSessionUserId() {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if(user.getUsername().equals("admin"))
+			return (long) 0;
+		
 		return this.user.findByEmail(user.getUsername()).getId();
 	}
 	
@@ -40,17 +44,17 @@ public class PostController {
 		return post.getOrderByDate();
 	}
 	
-	@GetMapping(value="/post", params="title")
+	@GetMapping(value="/posts", params="title")
 	public List<com.challengeWarmUp.challenge.dto.Post> getByTitle(@RequestParam String title){
 		return post.getByTitle(title);
 	}
 	
-	@GetMapping(value="/post", params="category")
+	@GetMapping(value="/posts", params="category")
 	public List<com.challengeWarmUp.challenge.dto.Post> getByCategory(@RequestParam String category){
 		return post.getByCategory(category);
 	}
 	
-	@GetMapping(value="/post", params={"title", "category"})
+	@GetMapping(value="/posts", params={"title", "category"})
 	public List<com.challengeWarmUp.challenge.dto.Post> getByTitleAndCategory(@RequestParam String title, @RequestParam String category){
 		return post.getByTitleAndCategory(title, category);
 	}
@@ -80,6 +84,7 @@ public class PostController {
 		}
 		
 		post.setImage(imageName);
+		post.setDeleted(false);
 		post.setIdUser(getSessionUserId());
 		return ResponseEntity.ok(this.post.create(post));
 	}
