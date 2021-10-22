@@ -2,14 +2,16 @@ package com.challengeWarmUp.challenge.dto;
 
 import java.util.Calendar;
 
+import com.challengeWarmUp.challenge.models.Category;
+
 public class Post {
 	private Long id;
 	private String title;
 	private String image;
-	private String category;
+	private Category category;
 	private Calendar date;
 	
-	public Post(Long id, String title, String image, String category, Calendar date) {
+	public Post(Long id, String title, String image, Category category, Calendar date) {
 		this.id = id;
 		this.title = title;
 		this.image = image;
@@ -41,11 +43,11 @@ public class Post {
 		this.image = image;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 

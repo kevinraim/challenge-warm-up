@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,8 +34,9 @@ public class Post {
 	@Column(name="image")
 	private String image;
 	
-	@Column(name="category")
-	private String category;
+	@ManyToOne
+	@JoinColumn(name="category_id")
+	private Category category;
 	
 	@Column(name="date")
 	@Temporal(TemporalType.DATE)
@@ -47,7 +50,7 @@ public class Post {
 	
 	public Post() {}
 	
-	public Post(Long id, String title, String content, String image, String category, Calendar date, Long idUser) {
+	public Post(Long id, String title, String content, String image, Category category, Calendar date, Long idUser) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
@@ -90,11 +93,11 @@ public class Post {
 		this.image = image;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 
