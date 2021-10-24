@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -13,8 +14,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtUtil {
 
-  private static final String SECRET = "secret";
-  private static final int EXPIRATION = 3600000 * 12; // 12 hours
+  @Value("${security.jwt.secret}")
+  private String SECRET;
+
+  @Value("${security.jwt.timeMilis}")
+  private int EXPIRATION;
+
+  @Value("${security.jwt.issuer}")
+  private String ISSUER;
 
   public String extractEmail(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -27,6 +34,10 @@ public class JwtUtil {
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
+  }
+
+  public String extractIssuer(String token) {
+    return extractClaim(token, Claims::getIssuer);
   }
 
   private Claims extractAllClaims(String token) {
@@ -43,8 +54,8 @@ public class JwtUtil {
   }
 
   private String createToken(Map<String, Object> claims, String subject) {
-    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+    return Jwts.builder().setClaims(claims).setSubject(subject).setIssuer(ISSUER)
+        .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
         .signWith(SignatureAlgorithm.HS256, SECRET).compact();
   }
 
